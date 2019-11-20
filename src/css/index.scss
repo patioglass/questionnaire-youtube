@@ -1,0 +1,171 @@
+.questionnaire {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  font-size: 1.2em;
+  &__wrap-inline {
+    display: inline-block;
+    width: 300px;
+  }
+  &__title {
+    font-size: 1.3em;
+  }
+  &__subTitle {
+    font-size: 1.15em;
+  }
+  &__subText {
+    color: #606060;
+  }
+  &__result {
+    text-align: left;
+    margin-top: 20px;
+    width: 80%;
+    &-window {
+      text-align: center;
+      width: 100%;
+      min-height: 300px;
+      padding: 10px;
+    }
+    &-item {
+      display: inline-block;
+      border-radius: 8px;
+      border: solid #cacaca 3.5px;
+      width: 290px;
+      vertical-align: top;
+      padding: 25px;
+      overflow-wrap: break-word;
+      color: white;
+      background: rgb(151, 182, 240);
+      margin: 10px 15px;
+      text-align: center;
+      text-shadow: 0.5px 0.5x 0 #444, -0.5px 0.5px 0 #444, 0.5px -0.5px 0 #444, -0.5px -0.5px 0 #444;
+    }
+    &-title {
+      font-size: 2em;
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      color: white;
+      text-align: center;
+      background: #444;
+    }
+    &-text {
+      font-size: 2.3em;
+    }
+    &-percentage {
+      color: yellow;
+      font-size: 2.7em;
+    }
+    &-deleteButton {
+      border-radius: 40px;
+      border: 1px solid #fff;
+      position: absolute;
+      padding: 1.4px;
+      width: 15px;
+      cursor: pointer;
+      margin-top: -16px;
+      margin-left: 290px;
+      &:hover {
+        background: #c9171e;
+        color: #fff;
+      }
+    }
+  }
+}
+.btn {
+  color: #fff;
+  width: 70%;
+  padding: 2px;
+  font-size: 0.8em;
+  text-align: center;
+  margin: 0 auto;
+  border-radius: 2px;
+  cursor: pointer;
+
+  &__useQuestionnaire {
+    display: inline-block;
+    width: 200px;
+    border: 1px #ccc solid;
+    margin: 10px;
+    padding: 10px;
+    color: #444;
+    &:hover {
+      background: #747474;
+      color: #fff;
+    }
+  }
+
+  &__inactive {
+    cursor: auto;
+    font-size: 2em;
+    display: inline-block;
+    text-align: center;
+    padding: 10px;
+    width: 350px;
+    margin-top: 15px;
+    background: #747474;
+  }
+  &__startQuestionnaire {
+    display: inline-block;
+    font-size: 2em;
+    width: 350px;
+    margin-top: 15px;
+    margin-left: 15px;
+    text-align: center;
+    background: #c9171e;
+    padding: 10px;
+    &:hover {
+      background: #a11218;
+    }
+  }
+
+  &__finishQuestionnaire {
+    display: inline-block;
+    font-size: 2em;
+
+    width: 350px;
+    margin-top: 15px;
+    text-align: center;
+    background: #4a49ad;
+    padding: 10px;
+    &:hover {
+      background: #3b3a8a;
+    }
+  }
+
+  &__addQuestionnaire {
+    display: inline-block;
+    width: 100px;
+    margin-left: 15px;
+    background: #00b39a;
+    &:hover {
+      background: #008f7b;
+    }
+  }
+  &__aggregate {
+    cursor: auto;
+    width: 280px;
+    font-size: 2em;
+
+    display: inline-block;
+    text-align: center;
+    margin-top: 15px;
+    margin-right: 15px;
+    padding: 10px;
+    margin-left: 15px;
+    background: #747474;
+  }
+  &__hide {
+    display: none;
+  }
+}
+
+input[type=checkbox] {
+  -ms-transform: scale(1.7);
+  -webkit-transform: scale(1.7);
+  transform: scale(1.7);
+  margin: 15px 5px;
+}
+.checkbox-icon {
+  padding: 13px;
+}

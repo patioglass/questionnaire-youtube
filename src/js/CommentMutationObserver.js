@@ -51,7 +51,7 @@ export default function CommentMutationObserver(props) {
         })
 
         // 項目が登録されていればアンケート開始可能
-        if (questionnaireList.length > 0) {
+        if (questionnaireList.length > 1) {
             setActiveButtonClass('btn__startQuestionnaire');
         } else {
             setActiveButtonClass('btn__inactive');
@@ -102,7 +102,7 @@ export default function CommentMutationObserver(props) {
     const startObserve = () => {
         const commentElement = document.getElementById('chat');
 
-        if (commentElement.length < 2) {
+        if (commentElement.length < 1) {
             return false;
         }
 

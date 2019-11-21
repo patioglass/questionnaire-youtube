@@ -3,6 +3,8 @@ import React, { useState }     from 'react';
 import CommentMutationObserver from './CommentMutationObserver';
 import InputForm               from './InputForm';
 
+import domready                from 'domready';
+
 import '../css/index.scss';
 
 let pageObserver = {};
@@ -12,7 +14,7 @@ export default function Questionnaire() {
     const [ questionnaireList, setQuestionnaireList ] = useState([]);   // アンケート項目
     const [ startObserveFlag, setStartObserveFlag ] = useState(false);  // アンケート開始ボタンの押下判定(inputの制御、observeの制御用)
     const [ restart, setRestart ] = useState(false);                    // アンケート作り直し押下判定
-    const [ liveContents, setLiveContents ] = useState(true);           // ライブ配信判定
+    const [ liveContents, setLiveContents ] = useState(false);           // ライブ配信判定
     const [ isQuestionnaire, setQuestionnaire ] = useState(false);      // アンケート開始フラグ
     const [ reload, setReload ] = useState(false);
     
@@ -59,14 +61,13 @@ export default function Questionnaire() {
     }
     
     const isLive = () => {
-        const chatHideButton = document.getElementById('show-hide-button');
-        if (!chatHideButton || chatHideButton.innerText.match(/リプレイ/)) {
+        const liveContents = document.getElementById('date').innerText.match(/ライブ配信開始/);
+        if (!liveContents) {
             return false;
         }
         return true;
     }
-
-    window.onload = () => {
+    domready(() => {
         const initObserve = setInterval(() => {
             if (document.getElementsByTagName('ytd-video-owner-renderer')[0]) {
                 
@@ -95,7 +96,7 @@ export default function Questionnaire() {
                 clearInterval(initObserve);
             }
         }, 500);
-    }
+    })
 
     return (
         <>

@@ -67,7 +67,8 @@ export default function Questionnaire() {
         }
         return true;
     }
-    domready(() => {
+
+    window.addEventListener('load', () => {
         const initObserve = setInterval(() => {
             if (document.getElementsByTagName('ytd-video-owner-renderer')[0]) {
                 

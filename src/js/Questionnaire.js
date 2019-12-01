@@ -61,7 +61,7 @@ export default function Questionnaire() {
     }
     
     const isLive = () => {
-        const liveContents = document.getElementById('date').innerText.match(/ライブ配信開始/);
+        const liveContents = document.getElementById('date').innerText.match(/ライブ配信開始|開始予定/);
         if (!liveContents) {
             return false;
         }

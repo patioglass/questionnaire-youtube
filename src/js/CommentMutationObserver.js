@@ -108,12 +108,12 @@ export default function CommentMutationObserver(props) {
 
         /*****  コメント欄observe *****/ 
         // コメント欄はiframe
-        const iframeContents = commentElement.getElementsByTagName('iframe')[0].contentWindow.document.getElementById('item-offset').children[0]; 
+        const iframeContents = commentElement.getElementsByTagName('iframe')[0].contentWindow.document.querySelector('#item-offset #items'); 
         // コメント欄監視
         commentObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 mutation.addedNodes.forEach((contents) => {
-                    const message = contents.innerText.split('\n')[1];
+                    const message = contents.querySelector('#message').innerText;
 
                     // 特殊文字削除
                     let targetMessage = '';

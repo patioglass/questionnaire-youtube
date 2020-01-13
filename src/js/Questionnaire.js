@@ -17,6 +17,7 @@ export default function Questionnaire() {
     const [ liveContents, setLiveContents ] = useState(false);           // ライブ配信判定
     const [ isQuestionnaire, setQuestionnaire ] = useState(false);      // アンケート開始フラグ
     const [ reload, setReload ] = useState(false);
+    const [ loadCommentFrame, setLoadCommentFrame ] = useState(false);
 
     // ページ遷移判定用
     let currentUrl = '';
@@ -69,14 +70,18 @@ export default function Questionnaire() {
     }
 
     const subWindowClose = () => {
+        changeQuestionnaire(false);
+        setReload(true);
+        subWindow = null;
         subRoot = null;
     }
 
-    window.addEventListener('load', () => {
+    const detectedCommentFrame = () => {
         const initObserve = setInterval(() => {
+            setLoadCommentFrame(true);
             if (document.getElementsByTagName('ytd-video-owner-renderer')[0]) {
                 
-               setLiveContents(isLive());
+                setLiveContents(isLive());
                 /*****  ページ全体observe *****/
                 pageObserver = new MutationObserver((mutations) => {
                     mutations.forEach((mutation) => {
@@ -84,6 +89,7 @@ export default function Questionnaire() {
                             if (mutation.addedNodes.length === 1 && currentUrl != window.location.href) {;
                                 currentUrl = window.location.href;
                                 // アンケート実施中にページ遷移したら強制リフレッシュ
+                                setLoadCommentFrame(false);
                                 changeLiveContents(isLive());
                                 changeQuestionnaire(false);
                                 setReload(true);
@@ -101,7 +107,7 @@ export default function Questionnaire() {
                 clearInterval(initObserve);
             }
         }, 500);
-    })
+    }
     
     if (liveContents && isQuestionnaire) {
         if (subRoot === null) {
@@ -138,7 +144,7 @@ export default function Questionnaire() {
         <div class='questionnaire'>
             <p class='questionnaire__title'>【 アンケート機能 】</p>
             <p class='questionnaire__subText'>Youtubeコメント欄の集計をとる拡張です。</p>
-            <p class='btn btn__useQuestionnaire' onClick={() => changeQuestionnaire(true)}>アンケート機能を使う</p>
+            <p class='btn btn__useQuestionnaire' onClick={() => changeQuestionnaire(true)}>アンケート機能画面起動</p>
             <br />
             {isQuestionnaire ? (
                 <>
@@ -156,7 +162,17 @@ export default function Questionnaire() {
                 </>
             ) : ''}
         </div>
-        ) : ''}
+        ) : (
+            <div>
+                <p class='btn btn__useQuestionnaire' onClick={() => detectedCommentFrame()}>アンケート機能を使う</p>
+                {loadCommentFrame ? (
+                    <>
+                    <p>読み込み中...</p>
+                    <p>※生配信中のものではない、または読み込みが終わらない場合はページリロードして再度お試しください。</p>
+                    </>
+                ): ''}
+            </div>
+        )}
         </>
     );
 }

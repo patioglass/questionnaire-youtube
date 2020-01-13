@@ -124,7 +124,7 @@ export default function CommentMutationObserver(props) {
                         }
                     }
                     // アンケートと関係ないコメントの場合return
-                    if (!targetMessage || !targetMessage.match(/^[0-9]{1,}$/)) {
+                    if (!targetMessage || !targetMessage.match(/^[1-9][0-9]*$/)) {
                         return;
                     }
 

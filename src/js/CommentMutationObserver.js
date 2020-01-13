@@ -184,6 +184,10 @@ export default function CommentMutationObserver(props) {
             {startObserveFlag ? (
                 <>
                     <p class='btn btn__aggregate'>集計中</p>
+                    <p class='btn btn__aggregate'>現在投票数：{Object.keys(userList).length}</p>
+                    <br />
+                    <br />
+                    <br />
                     <p class='btn btn__startQuestionnaire' onClick={finishObserve}>アンケートを終了する</p>
                 </>
             ) : (

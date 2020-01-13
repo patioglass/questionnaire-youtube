@@ -1,13 +1,13 @@
 import React, { useState }     from 'react';
+import ReactDOM                from 'react-dom';
 
 import CommentMutationObserver from './CommentMutationObserver';
 import InputForm               from './InputForm';
-
-import domready                from 'domready';
-
-import '../css/index.scss';
+import * as subWindowCss            from '../css/subWindow';
 
 let pageObserver = {};
+let subWindow = null;
+let subRoot = null;
 
 export default function Questionnaire() {
     const [ questionnaireTitle, setQuestionnaireTitle] = useState('');  // アンケートタイトル
@@ -17,7 +17,7 @@ export default function Questionnaire() {
     const [ liveContents, setLiveContents ] = useState(false);           // ライブ配信判定
     const [ isQuestionnaire, setQuestionnaire ] = useState(false);      // アンケート開始フラグ
     const [ reload, setReload ] = useState(false);
-    
+
     // ページ遷移判定用
     let currentUrl = '';
 
@@ -68,6 +68,10 @@ export default function Questionnaire() {
         return true;
     }
 
+    const subWindowClose = () => {
+        subRoot = null;
+    }
+
     window.addEventListener('load', () => {
         const initObserve = setInterval(() => {
             if (document.getElementsByTagName('ytd-video-owner-renderer')[0]) {
@@ -98,7 +102,36 @@ export default function Questionnaire() {
             }
         }, 500);
     })
+    
+    if (liveContents && isQuestionnaire) {
+        if (subRoot === null) {
+            subWindow = window.open('about:blank', null, 'resizable=no,scrollbars=yes,status=no');
+            subRoot = subWindow.document.createElement('div');
+            subWindow.document.body.appendChild(subRoot);
 
+            const subHead = subWindow.document.head;
+            const subStyle = subWindow.document.createElement('style');
+            subStyle.textContent = subWindowCss.subWindowCss;
+            subHead.appendChild(subStyle);
+            subWindow.addEventListener('unload', subWindowClose);
+        }
+        ReactDOM.render(
+            <CommentMutationObserver 
+                questionnaireList={questionnaireList}
+                questionnaireTitle={questionnaireTitle}
+                restart={restart}
+                reload={reload}
+                liveContents={liveContents}
+                changeRestart={changeRestart}
+                startObserveFlag={startObserveFlag}
+                deleteQuestionnare={(index) => deleteQuestionnare(index)}
+                initQuestionnaire={initQuestionnaire}
+                changePropsObserveFlag={(flag) => changeObserveFlag(flag)}
+                changeReload={(state) => changeReload(state)}
+            >
+            </CommentMutationObserver>
+            , subRoot);
+    }
     return (
         <>
         {liveContents ? (
@@ -120,21 +153,6 @@ export default function Questionnaire() {
                 <br />
                 <br />
                 <br />
-
-                <CommentMutationObserver 
-                    questionnaireList={questionnaireList}
-                    questionnaireTitle={questionnaireTitle}
-                    restart={restart}
-                    reload={reload}
-                    liveContents={liveContents}
-                    changeRestart={changeRestart}
-                    startObserveFlag={startObserveFlag}
-                    deleteQuestionnare={(index) => deleteQuestionnare(index)}
-                    initQuestionnaire={initQuestionnaire}
-                    changePropsObserveFlag={(flag) => changeObserveFlag(flag)}
-                    changeReload={(state) => changeReload(state)}
-                >
-                </CommentMutationObserver>
                 </>
             ) : ''}
         </div>

@@ -2,18 +2,7 @@ import React, { useState } from 'react';
 
 export default function InputForm(props) {
     const { updateQuestionnaire, updateTitle, questionnaireTitle, startObserveFlag, restart } = props;
-    const [ deleteOtherContents, setDeleteOtherContents ] = useState(false);
     const [ error, setError ] = useState('');
-
-    const deleteContentsStyle = `
-        #masthead-container, #player, #info, #meta, #secondary, #related, #chat {
-            visibility:hidden;
-        }
-        ytd-watch-flexy {
-            background-color: lime !important;
-        }
-    `;
-
     const addQuestionnaire = () => {
         let inputQuestionnaire = document.getElementById('questionnaire__input');
         if (inputQuestionnaire.value !== '') {
@@ -29,23 +18,9 @@ export default function InputForm(props) {
         let inputQuestionnaireTitle = document.getElementById('questionnaire__inputTitle');
         updateTitle(inputQuestionnaireTitle.value);
     }
-    
-    const toggleContents = () => {
-        setDeleteOtherContents(!deleteOtherContents);
-    }
 
     return (
         <>        
-        {deleteOtherContents ? <style>{deleteContentsStyle}</style> : ''}
-        <input 
-            type='checkbox'
-            id='deleteContents'
-            name='deleteContents'
-            onChange={toggleContents}
-            checked={deleteOtherContents ? 'checked' : ''}
-        />
-        <label class="checkbox-icon">アンケートのみの画面にする</label>
-
         <br />
         <br />
         <div class='questionnaire__wrap-inline'>

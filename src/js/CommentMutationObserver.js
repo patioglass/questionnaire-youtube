@@ -60,6 +60,10 @@ export default function CommentMutationObserver(props) {
 
     const changeObserve = (flag) => {
         if (questionnaireList.length > 0) {
+            // アンケート開始の時はlocalStorageに実施したことのあるアンケートとして保存する
+            if (flag) {
+                insertLocalStorage();
+            }
             changePropsObserveFlag(flag);
         }
     }
@@ -82,6 +86,15 @@ export default function CommentMutationObserver(props) {
         setNewUser({});
 
         changeRestart(true);
+    }
+
+    // アンケート再実施
+    const retryState = () => {
+        setUserList({});
+        setVotes([]);
+        changeFilter(true);
+
+        changeRestart(false);
     }
 
     // アンケート作り直し
@@ -151,25 +164,20 @@ export default function CommentMutationObserver(props) {
         return true;
     }
 
+    const insertLocalStorage = () => {
+        let currentNum = 0;
+
+        for (let key in localStorage) {
+            if (key.match(/patio/)) {
+                currentNum += 1;
+            }
+        }
+
+        // タイトル,アンケート項目1,アンケート項目2...となるように整形する
+        localStorage.setItem('questionnaire::patio' + currentNum, questionnaireTitle + "," + questionnaireList.join());
+    }
     return (
         <div class='questionnaire__result'>
-            <p class='questionnaire__Title'>2. 設定した内容が反映されます↓</p>
-            <p class='questionnaire__subText'>項目を設定後、「アンケートを開始する」を押すと集計が始まります。</p>    
-            
-            <p class='questionnaire__subText'>例：）「1: 項目」が登録されてる場合、1というコメントが「項目」の票数にカウントされます。</p>
-            <p class='questionnaire__subText'>数字のコメントを拾います。</p>
-
-            <br />
-            <input 
-                type='checkbox'
-                id='filter'
-                name='filter'
-                onChange={() => changeFilter(!filter)}
-                checked={filter ? 'checked' : ''}
-            />
-            <label class="checkbox-icon">チェックを外すと投票%が開示された状態になります</label>
-            <br />
-
             <QuestionnaireResult 
                 userList={userList}
                 filter={filter}
@@ -182,18 +190,21 @@ export default function CommentMutationObserver(props) {
             >
             </QuestionnaireResult>
             {startObserveFlag ? (
-                <>
+                <div class="btn__wrap">
                     <p class='btn btn__aggregate'>集計中</p>
                     <p class='btn btn__aggregate'>現在投票数：{Object.keys(userList).length}</p>
                     <br />
                     <br />
                     <br />
                     <p class='btn btn__startQuestionnaire' onClick={finishObserve}>アンケートを終了する</p>
-                </>
+                </div>
             ) : (
                 <>
                     {restart ? (
-                        <p class='btn btn__finishQuestionnaire' onClick={resetState}>アンケートを作り直す</p>
+                        <div class='btn__wrap'>
+                            <p class='btn btn__finishQuestionnaire' onClick={resetState}>アンケートを作り直す</p>
+                            <p class='btn btn__retryQuestionnaire' onClick={retryState}>同じアンケートをもう一度する</p>
+                        </div>
                     )
                     : (
                         <div class='btn__wrap'>
@@ -203,6 +214,25 @@ export default function CommentMutationObserver(props) {
                     )}
                 </>
             )}
+
+            <br />
+            <br />
+            <input
+                type='checkbox'
+                id='filter'
+                name='filter'
+                onChange={() => changeFilter(!filter)}
+                checked={filter ? 'checked' : ''}
+            />
+
+            <label class="checkbox-icon">チェックを外すと投票%が開示された状態になります</label>
+            <br />
+            <p class='questionnaire__Title'>2. 設定した内容が反映されます↓</p>
+            <p class='questionnaire__subText'>項目を設定後、「アンケートを開始する」を押すと集計が始まります。</p>
+
+            <p class='questionnaire__subText'>例：）「1: 項目」が登録されてる場合、1というコメントが「項目」の票数にカウントされます。</p>
+            <p class='questionnaire__subText'>数字のコメントを拾います。</p>
+
         </div>
     );
 }

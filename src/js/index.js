@@ -1,6 +1,7 @@
 import React         from 'react';
 import ReactDOM      from 'react-dom';
 import Questionnaire from './Questionnaire';
+import '../css/index.scss';
 
 function addQuestionnaire() {
     // 配信概要欄の要素

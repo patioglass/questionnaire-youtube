@@ -18,9 +18,13 @@ export default function Questionnaire() {
     const [ isQuestionnaire, setQuestionnaire ] = useState(false);      // アンケート開始フラグ
     const [ reload, setReload ] = useState(false);
     const [ loadCommentFrame, setLoadCommentFrame ] = useState(false);
+    const [ historyReflesh, setHistoryReflesh ] = useState(false);
 
     // ページ遷移判定用
     let currentUrl = '';
+
+    // localStorageが使えるかどうか
+    const canLocalStorage = window.localStorage;
 
     const updateQuestionnaire = (inputQuestionnaire) => {
         const newQuestionnaire = new Array(inputQuestionnaire);
@@ -138,6 +142,41 @@ export default function Questionnaire() {
             </CommentMutationObserver>
             , subRoot);
     }
+
+    // 履歴にあるアンケートを読み込む
+    const selectedHistory = () => {
+        const selectValue = document.getElementById("selectedHistory").value;
+        let newQuestionnaire = [];
+        localStorage.getItem(selectValue).split(",").forEach((val, index) => {
+            // タイトル
+            if (index === 0) {
+                setQuestionnaireTitle(val);
+            } else {
+                // アンケート項目
+                newQuestionnaire.push(val);
+            }
+        });
+        setQuestionnaireList(newQuestionnaire);
+    }
+
+    const deleteHistory = () => {
+        const selectValue = document.getElementById("selectedHistory").value;
+        if (window.confirm( "'" + localStorage.getItem(selectValue).split(",")[0] + "' を削除しますか？")) {
+            localStorage.removeItem(selectValue);
+            setHistoryReflesh(!historyReflesh);
+        }
+    }
+
+    // localStorageからアンケート履歴を取得する
+    // key => アンケートのタイトル
+    // value => タイトル,アンケート項目1,アンケート項目2,....
+    const historyOptions = Object.keys(localStorage).map((key) => {
+        if (key.match(/patio/)) {
+            const historyValue = localStorage[key].split(",");
+            return <option value={key}>{historyValue[0]}</option>
+        }
+    }).filter((e) => {return e !== undefined;})
+
     return (
         <>
         {liveContents ? (
@@ -155,6 +194,31 @@ export default function Questionnaire() {
                     startObserveFlag={startObserveFlag}
                     restart={restart}
                 />
+
+                <br />
+                <br />
+                <br />
+                <h3>履歴から選択</h3>
+                    {canLocalStorage ? (
+                        <>
+                        {historyOptions.length > 0 ? (
+                        <>
+                        <select id="selectedHistory">
+                            {historyOptions}
+                        </select>
+                        <p class="btn btn__historyButton" onClick={selectedHistory}>読み込む</p>
+                        <p class="btn btn__historyDeleteButton" onClick={deleteHistory}>削除する</p>
+                        </>
+                        ) : (
+                        <p>履歴はありません。</p>
+                        )}
+                        </>
+                    ) : (
+                        <>
+                        <p>※現在利用されている環境では、アンケートの履歴機能を利用できません。</p>
+                        <p>ブラウザを変えるなど対応してください。</p>
+                        </>
+                    )}
 
                 <br />
                 <br />

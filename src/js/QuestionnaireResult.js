@@ -32,8 +32,10 @@ export default function QuestionnaireResult(props) {
     return (
         <>
         {questionnaireList.length > 1 ? (
-            <p class='questionnaire__result-title'>{questionnaireTitle}<br />(半角1~{questionnaireList.length}のコメントで投票に参加)</p>
-        ) : ''}
+            <p class='questionnaire__result-title'>{questionnaireTitle}<br />(半角1~{questionnaireList.length}のコメントで投票に参加できます)</p>
+        ) : (
+            <p class='questionnaire__result-title'>{questionnaireTitle}<br />(半角数字のコメントで投票に参加できます)</p>
+        )}
         <div class='questionnaire__result-window'>
             {questionnaireComponent}
         </div>

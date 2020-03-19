@@ -28,20 +28,19 @@ export const subWindowCss = `
         text-shadow: .5px .5x 0 #444,-.5px .5px 0 #444,.5px -.5px 0 #444,-.5px -.5px 0 #444;
     }
     .questionnaire__result-title {
-        font-size: 2em;
+        font-size: 1.75em;
         width: 100%;
-        margin-top: 10px;
-        padding: 10px;
+        padding: 30px;
         color: #fff;
         text-align: center;
         background: #444;
     }
     .questionnaire__result-text {
-        font-size: 2.3em;
+        font-size: 1.5em;
     }
     .questionnaire__result-percentage {
         color: #ff0;
-        font-size: 2.7em;
+        font-size: 1.5em;
     }
     .questionnaire__result-deleteButton {
         border-radius: 40px;
@@ -67,12 +66,15 @@ export const subWindowCss = `
         border-radius: 2px;
         cursor: pointer;
     }
+    .btn__wrap {
+        text-align: center;
+    }
     .btn__inactive {
         cursor: auto;
         background: #747474;
     }
     .btn__inactive,.btn__startQuestionnaire {
-        font-size: 2em;
+        font-size: 1.75em;
         display: inline-block;
         text-align: center;
         padding: 10px;
@@ -88,7 +90,7 @@ export const subWindowCss = `
     }
     .btn__finishQuestionnaire {
         display: inline-block;
-        font-size: 2em;
+        font-size: 1.75em;
         width: 350px;
         margin-top: 15px;
         text-align: center;
@@ -98,6 +100,21 @@ export const subWindowCss = `
     .btn__finishQuestionnaire:hover {
         background: #3b3a8a;
     }
+    .btn__retryQuestionnaire {
+        display: inline-block;
+        font-size: 1.75em;
+
+        width: 450px;
+        margin-top: 15px;
+        margin-left: 40px;
+        text-align: center;
+        background: #db4b94;
+        padding: 10px;
+    }
+    .btn__retryQuestionnaire:hover {
+        background: #94285f;
+    }
+
     .btn__addQuestionnaire {
         display: inline-block;
         width: 100px;
@@ -110,7 +127,7 @@ export const subWindowCss = `
     .btn__aggregate {
         cursor: auto;
         width: 280px;
-        font-size: 2em;
+        font-size: 1.75em;
         display: inline-block;
         text-align: center;
         margin-top: 15px;

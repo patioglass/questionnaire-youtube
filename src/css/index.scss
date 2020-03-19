@@ -2,7 +2,7 @@
   margin-top: 10px;
   padding: 10px;
   width: 100%;
-  font-size: 1.2em;
+  font-size: 1.75em;
   &__wrap-inline {
     display: inline-block;
     width: 300px;
@@ -41,10 +41,9 @@
       text-shadow: 0.5px 0.5x 0 #444, -0.5px 0.5px 0 #444, 0.5px -0.5px 0 #444, -0.5px -0.5px 0 #444;
     }
     &-title {
-      font-size: 2em;
+      font-size: 1.75em;
       width: 100%;
-      margin-top: 10px;
-      padding: 10px;
+      padding: 30px;
       color: white;
       text-align: center;
       background: #444;
@@ -82,6 +81,10 @@
   border-radius: 2px;
   cursor: pointer;
 
+  &__wrap {
+    text-align: center;
+  }
+
   &__useQuestionnaire {
     display: inline-block;
     width: 200px;
@@ -97,7 +100,7 @@
 
   &__inactive {
     cursor: auto;
-    font-size: 2em;
+    font-size: 1.75em;
     display: inline-block;
     text-align: center;
     padding: 10px;
@@ -107,7 +110,7 @@
   }
   &__startQuestionnaire {
     display: inline-block;
-    font-size: 2em;
+    font-size: 1.75em;
     width: 350px;
     margin-top: 15px;
     margin-left: 15px;
@@ -121,7 +124,7 @@
 
   &__finishQuestionnaire {
     display: inline-block;
-    font-size: 2em;
+    font-size: 1.75em;
 
     width: 350px;
     margin-top: 15px;
@@ -133,10 +136,56 @@
     }
   }
 
-  &__addQuestionnaire {
+  &__historyButton {
     display: inline-block;
+    font-size: 1.2em;
+    
     width: 100px;
     margin-left: 15px;
+    text-align: center;
+    background: #ffaa6e;
+    padding: 4px;
+    &:hover {
+      background: #e67a4c;
+    }
+  }
+
+  &__historyDeleteButton {
+    display: inline-block;
+    font-size: 1.2em;
+    
+    width: 100px;
+    margin-left: 15px;
+    text-align: center;
+    background: #e7616c;
+    padding: 4px;
+    &:hover {
+      background: #ad3247;
+    } 
+  }
+
+  &__retryQuestionnaire {
+    display: inline-block;
+    font-size: 1.75em;
+
+    width: 450px;
+    margin-left: 50px;
+    margin-top: 15px;
+    text-align: center;
+    background: #db4b94;
+    padding: 10px;
+    &:hover {
+      background: #94285f;
+    }
+  }
+
+  &__addQuestionnaire {
+    display: inline-block;
+    font-size: 1.2em;
+
+    width: 100px;
+    margin-left: 15px;
+    padding: 4px;
     background: #00b39a;
     &:hover {
       background: #008f7b;
@@ -145,7 +194,7 @@
   &__aggregate {
     cursor: auto;
     width: 280px;
-    font-size: 2em;
+    font-size: 1.75em;
 
     display: inline-block;
     text-align: center;
@@ -168,4 +217,8 @@ input[type=checkbox] {
 }
 .checkbox-icon {
   padding: 13px;
+}
+
+select {
+  padding: 3px;
 }

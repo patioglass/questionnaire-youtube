@@ -69,11 +69,11 @@ export const subWindowCss = `
     .btn__wrap {
         text-align: center;
     }
-    .btn__inactive {
+    .btn__startInactive,.btn__historyInactive {
         cursor: auto;
         background: #747474;
     }
-    .btn__inactive,.btn__startQuestionnaire {
+    .btn__startInactive,.btn__startQuestionnaire {
         font-size: 1.75em;
         display: inline-block;
         text-align: center;
@@ -113,6 +113,23 @@ export const subWindowCss = `
     }
     .btn__retryQuestionnaire:hover {
         background: #94285f;
+    }
+
+    .btn__historyInactive,.btn__saveHistory {
+        font-size: 1.2em;
+
+        width: 300px;
+        margin-top: 15px;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .btn__saveHistory {
+        background: #2ab4de;
+    }
+
+    .btn__saveHistory:hover {
+        background: #1d70ab;
     }
 
     .btn__addQuestionnaire {

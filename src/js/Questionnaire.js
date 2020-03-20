@@ -18,7 +18,7 @@ export default function Questionnaire() {
     const [ isQuestionnaire, setQuestionnaire ] = useState(false);      // アンケート開始フラグ
     const [ reload, setReload ] = useState(false);
     const [ loadCommentFrame, setLoadCommentFrame ] = useState(false);
-    const [ historyReflesh, setHistoryReflesh ] = useState(false);
+    const [ historyRefresh, setHistoryRefresh ] = useState(false);
 
     // ページ遷移判定用
     let currentUrl = '';
@@ -63,6 +63,10 @@ export default function Questionnaire() {
     
     const changeReload = (state) => {
         setReload(state);
+    }
+
+    const changeHistoryState = (state) => {
+        setHistoryRefresh(state);
     }
     
     const isLive = () => {
@@ -138,6 +142,8 @@ export default function Questionnaire() {
                 initQuestionnaire={initQuestionnaire}
                 changePropsObserveFlag={(flag) => changeObserveFlag(flag)}
                 changeReload={(state) => changeReload(state)}
+                historyRefresh={historyRefresh}
+                changeHistoryState={(state) => changeHistoryState(state)}
             >
             </CommentMutationObserver>
             , subRoot);
@@ -163,7 +169,7 @@ export default function Questionnaire() {
         const selectValue = document.getElementById("selectedHistory").value;
         if (window.confirm( "'" + localStorage.getItem(selectValue).split(",")[0] + "' を削除しますか？")) {
             localStorage.removeItem(selectValue);
-            setHistoryReflesh(!historyReflesh);
+            changeHistoryState(!historyRefresh);
         }
     }
 

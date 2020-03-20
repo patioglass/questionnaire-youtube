@@ -212,8 +212,12 @@ export default function Questionnaire() {
                         <select id="selectedHistory">
                             {historyOptions}
                         </select>
+                        {!startObserveFlag ? (
+                        <>
                         <p class="btn btn__historyButton" onClick={selectedHistory}>読み込む</p>
                         <p class="btn btn__historyDeleteButton" onClick={deleteHistory}>削除する</p>
+                        </>
+                        ) : ''}
                         </>
                         ) : (
                         <p>履歴はありません。</p>

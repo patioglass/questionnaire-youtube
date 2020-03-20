@@ -14,10 +14,11 @@ export default function CommentMutationObserver(props) {
 
     const [ observeComplete, setObserveComplete ] = useState(false);    // observer起動確認用
     const [ filter, setFilter ] = useState(true);                       // %の表示非表示
-    const [ activeButtonClass, setActiveButtonClass ] = useState('btn__inactive');  // アンケート開始のtoggle
+    const [ startButtonClass, setStartButtonClass ] = useState('btn__inactive');  // アンケート開始のtoggle
+    const [ historyButtonClass, setHistoryButtonClass ] = useState('btn__inactive');  // 履歴保存ボタンのtoggle
 
     // todo: props地獄なのでなんとかしたい
-    const { questionnaireList, questionnaireTitle, restart, reload, startObserveFlag, deleteQuestionnare, initQuestionnaire, changePropsObserveFlag, changeRestart, changeReload } = props;
+    const { questionnaireList, questionnaireTitle, restart, reload, startObserveFlag, deleteQuestionnare, initQuestionnaire, changePropsObserveFlag, changeRestart, changeReload, historyRefresh, changeHistoryState } = props;
 
     // 新規投票(newUser) or コメント欄監視開始(startObserveFlag) or アンケート項目追加/削除(questionnaireList) or ページ遷移reload
     useEffect(() => {
@@ -52,18 +53,20 @@ export default function CommentMutationObserver(props) {
 
         // 項目が登録されていればアンケート開始可能
         if (questionnaireList.length > 1) {
-            setActiveButtonClass('btn__startQuestionnaire');
+            setStartButtonClass('btn__startQuestionnaire');
         } else {
-            setActiveButtonClass('btn__inactive');
+            setStartButtonClass('btn__startInactive');
         }
-    }, [newUser, startObserveFlag, questionnaireList])
+
+        if (questionnaireTitle) {
+            setHistoryButtonClass("btn__saveHistory");
+        } else {
+            setHistoryButtonClass("btn__historyInactive");
+        }
+    }, [newUser, startObserveFlag, questionnaireList, questionnaireTitle])
 
     const changeObserve = (flag) => {
         if (questionnaireList.length > 0) {
-            // アンケート開始の時はlocalStorageに実施したことのあるアンケートとして保存する
-            if (flag) {
-                insertLocalStorage();
-            }
             changePropsObserveFlag(flag);
         }
     }
@@ -81,7 +84,7 @@ export default function CommentMutationObserver(props) {
 
         // アンケート終了後にfilterを解除
         changeFilter(false);
-        setActiveButtonClass('btn__inactive');
+        setStartButtonClass('btn__inactive');
         setObserveComplete(false);
         setNewUser({});
 
@@ -164,17 +167,20 @@ export default function CommentMutationObserver(props) {
         return true;
     }
 
-    const insertLocalStorage = () => {
-        let currentNum = 0;
+    const saveHistory = () => {
+        if (questionnaireTitle) {
+            let currentNum = 0;
 
-        for (let key in localStorage) {
-            if (key.match(/patio/)) {
-                currentNum += 1;
+            for (let key in localStorage) {
+                if (key.match(/patio/)) {
+                    currentNum += 1;
+                }
             }
-        }
 
-        // タイトル,アンケート項目1,アンケート項目2...となるように整形する
-        localStorage.setItem('questionnaire::patio' + currentNum, questionnaireTitle + "," + questionnaireList.join());
+            // タイトル,アンケート項目1,アンケート項目2...となるように整形する
+            localStorage.setItem('questionnaire::patio' + currentNum, questionnaireTitle + "," + questionnaireList.join());
+            changeHistoryState(!historyRefresh);
+        }
     }
     return (
         <div class='questionnaire__result'>
@@ -209,7 +215,8 @@ export default function CommentMutationObserver(props) {
                     : (
                         <div class='btn__wrap'>
                             <p class='btn btn__aggregate'>現在投票数：{Object.keys(userList).length}</p>
-                            <p class={'btn ' + activeButtonClass} onClick={() => changeObserve(true)}>アンケートスタート</p>
+                            <p class={'btn ' + startButtonClass} onClick={() => changeObserve(true)}>アンケートスタート</p>
+                            <p class={'btn ' + historyButtonClass} onClick={saveHistory}>アンケート内容を保存する</p>
                         </div>
                     )}
                 </>

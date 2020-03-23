@@ -38,6 +38,8 @@ export default function CommentMutationObserver(props) {
                         return 0;
                     }));
                     setObserveComplete(true);
+                    setNewUser({});
+                    setUserList({});
                     clearInterval(initObserve);
                 }
             }, 500);

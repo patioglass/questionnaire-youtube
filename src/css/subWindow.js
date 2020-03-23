@@ -39,8 +39,11 @@ export const subWindowCss = `
         font-size: 1.5em;
     }
     .questionnaire__result-percentage {
-        color: #ff0;
-        font-size: 1.5em;
+        color: #fff;
+        font-weight: bold;
+        text-stroke: 1px #000;
+        -webkit-text-stroke: 1px #ffe000;
+        font-size: 1.75em;
     }
     .questionnaire__result-deleteButton {
         border-radius: 40px;

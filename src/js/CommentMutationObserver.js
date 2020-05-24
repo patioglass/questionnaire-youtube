@@ -16,6 +16,7 @@ export default function CommentMutationObserver(props) {
     const [ filter, setFilter ] = useState(true);                       // %の表示非表示
     const [ startButtonClass, setStartButtonClass ] = useState('btn__inactive');  // アンケート開始のtoggle
     const [ historyButtonClass, setHistoryButtonClass ] = useState('btn__inactive');  // 履歴保存ボタンのtoggle
+    const [ historySave, setHistorySave ] = useState(false);
 
     // todo: props地獄なのでなんとかしたい
     const { questionnaireList, questionnaireTitle, restart, reload, startObserveFlag, deleteQuestionnare, initQuestionnaire, changePropsObserveFlag, changeRestart, changeReload, historyRefresh, changeHistoryState } = props;
@@ -44,14 +45,17 @@ export default function CommentMutationObserver(props) {
                 }
             }, 500);
         }
+        if (startObserveFlag) {
+            // 新規投票登録
+            Object.keys(newUser).forEach((key) => {
+                if (!userList[key]) {
+                console.log('登録：'+ newUser[key]);
 
-        // 新規投票登録
-        Object.keys(newUser).forEach((key) => {
-            if (!userList[key]) {
-                changeVotes(newUser[key], 1);
-                setUserList(list => ({...list, [key]: newUser[key]}));
-            }
-        })
+                    changeVotes(newUser[key], 1);
+                    setUserList(list => ({...list, [key]: newUser[key]}));
+                }
+            })
+        }
 
         // 項目が登録されていればアンケート開始可能
         if (questionnaireList.length > 1) {
@@ -182,6 +186,8 @@ export default function CommentMutationObserver(props) {
             // タイトル,アンケート項目1,アンケート項目2...となるように整形する
             localStorage.setItem('questionnaire::patio' + currentNum, questionnaireTitle + "," + questionnaireList.join());
             changeHistoryState(!historyRefresh);
+            setHistorySave(true);
+            setTimeout(setHistorySave, 3000, false);
         }
     }
     return (
@@ -219,6 +225,12 @@ export default function CommentMutationObserver(props) {
                             <p class='btn btn__aggregate'>現在投票数：{Object.keys(userList).length}</p>
                             <p class={'btn ' + startButtonClass} onClick={() => changeObserve(true)}>アンケートスタート</p>
                             <p class={'btn ' + historyButtonClass} onClick={saveHistory}>アンケート内容を保存する</p>
+                            <p
+                                style={{
+                                    transition: '1s',
+                                    opacity: historySave ? 1 : 0
+                                }}
+                            >保存完了しました</p>
                         </div>
                     )}
                 </>

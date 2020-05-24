@@ -20,7 +20,6 @@ export default function QuestionnaireResult(props) {
                       >×</div>
                   ) : ''}
                   <p class='questionnaire__result-text'>{index + 1} : {text}</p>
-                  <br />
                   {filter ? (
                       <p class='questionnaire__result-percentage'>??. ?%</p>
                   ) : (

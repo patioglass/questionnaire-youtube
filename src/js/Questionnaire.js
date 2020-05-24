@@ -204,7 +204,7 @@ export default function Questionnaire() {
                 <br />
                 <br />
                 <br />
-                <h3>履歴から選択</h3>
+                <h3>履歴からアンケートを作成</h3>
                     {canLocalStorage ? (
                         <>
                         {historyOptions.length > 0 ? (

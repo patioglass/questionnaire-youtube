@@ -17,7 +17,7 @@ export const subWindowCss = `
         display: inline-block;
         border-radius: 8px;
         border: 3.5px solid #cacaca;
-        width: 390px;
+        width: 350px;
         vertical-align: top;
         padding: 25px;
         overflow-wrap: break-word;
@@ -48,12 +48,9 @@ export const subWindowCss = `
     .questionnaire__result-deleteButton {
         border-radius: 40px;
         border: 1px solid #fff;
-        position: absolute;
         padding: 1.4px;
-        width: 15px;
+        width: 25px;
         cursor: pointer;
-        margin-top: -16px;
-        margin-left: 390px;
     }
     .questionnaire__result-deleteButton:hover {
         background: #c9171e;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import QuestionnaireResult　　　　　   from './QuestionnaireResult';
+import { toHalfWidthNumber, extractionNumber } from './formatter/textFormatter';
 
 let commentObserver = {};
 const spStr = [
@@ -128,25 +129,19 @@ export default function CommentMutationObserver(props) {
             return false;
         }
 
-        /*****  コメント欄observe *****/ 
+        /*****  コメント欄observe *****/
         // コメント欄はiframe
-        const iframeContents = commentElement.getElementsByTagName('iframe')[0].contentWindow.document.querySelector('#item-offset #items'); 
+        const iframeContents = commentElement.getElementsByTagName('iframe')[0].contentWindow.document.querySelector('#item-offset #items');
         // コメント欄監視
         commentObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 mutation.addedNodes.forEach((contents) => {
                     const message = contents.querySelector('#message').innerText;
 
-                    // 特殊文字削除
-                    let targetMessage = '';
-                    for (let i = 0; i < message.length; i++) {
-                        const charCode = message.charCodeAt(i);
-                        if (spStr.indexOf(charCode) === -1) {
-                            targetMessage += String.fromCharCode(charCode);
-                        }
-                    }
+                    let targetMessage = toHalfWidthNumber(extractionNumber(message));
+
                     // アンケートと関係ないコメントの場合return
-                    if (!targetMessage || !targetMessage.match(/^[1-9][0-9]*$/)) {
+                    if (!targetMessage) {
                         return;
                     }
 
@@ -164,11 +159,11 @@ export default function CommentMutationObserver(props) {
                 })
             });
         });
-     
+
         commentObserver.observe(iframeContents, {
             childList:  true
         })
-        /*****  コメント欄observe *****/ 
+        /*****  コメント欄observe *****/
 
         return true;
     }
@@ -192,7 +187,7 @@ export default function CommentMutationObserver(props) {
     }
     return (
         <div class='questionnaire__result'>
-            <QuestionnaireResult 
+            <QuestionnaireResult
                 userList={userList}
                 filter={filter}
                 votes={votes}

@@ -149,6 +149,25 @@ export default function Questionnaire() {
             , subRoot);
     }
 
+    // cssファイルを読み込む
+    const changeCssFile = (e) => {
+        const reader = new FileReader();
+        reader.readAsText(e.target.files[0]);
+
+        reader.addEventListener( 'load', function() {
+            const targetCss = reader.result;
+
+            // すでに読み込んでいた場合、前のものを削除
+            if (subWindow.document.styleSheets.length > 1) {
+                subWindow.document.getElementsByTagName('style')[1].remove();
+            }
+            const subHead = subWindow.document.head;
+            const subStyle = subWindow.document.createElement('style');
+            subStyle.textContent = targetCss;
+            subHead.appendChild(subStyle);
+        })
+    }
+
     // 履歴にあるアンケートを読み込む
     const selectedHistory = () => {
         const selectValue = document.getElementById("selectedHistory").value;
@@ -232,6 +251,13 @@ export default function Questionnaire() {
 
                 <br />
                 <br />
+                <h3>外部cssを読み込む</h3>
+                <br />
+                <input type="file" id="cssFile" onChange={(e) => changeCssFile(e)} />
+                <br />
+                <br />
+                <p>cssを読み込ませることでアンケート画面のデザインを変更することができます。</p>
+                <p><a href="https://patio.booth.pm/items/2111600" target="_blank">公式の提供テンプレートはコチラ</a></p>
                 <br />
                 </>
             ) : ''}

@@ -1,5 +1,7 @@
 export const subWindowCss = `
+    @import url(https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c);
     body {
+        font-family: "M PLUS Rounded 1c";
         background-color: lime;
     }
     .questionnaire__result {
@@ -36,7 +38,7 @@ export const subWindowCss = `
         background: #444;
     }
     .questionnaire__result-text {
-        font-size: 1.5em;
+        font-size: 1.8em;
     }
     .questionnaire__result-percentage {
         color: #fff;

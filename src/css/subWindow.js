@@ -155,8 +155,24 @@ export const subWindowCss = `
         margin-left: 15px;
         background: #747474;
     }
+    .btn__detail {
+        cursor: auto;
+        padding: 10px;
+        width: 500px;
+        font-size: 1em;
+        color: #444;
+        background: #fff;
+    }
     .btn__hide {
         display: none;
+    }
+    .btn__voteCount {
+        color: white;
+        background: #ff6104;
+        cursor: auto;
+        width: 280px;
+        margin-right: 63%;
+        font-size: 1.75em;
     }
     input[type=checkbox] {
         -ms-transform: scale(1.7);

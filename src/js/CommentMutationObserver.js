@@ -17,6 +17,8 @@ export default function CommentMutationObserver(props) {
     const [ startButtonClass, setStartButtonClass ] = useState('btn__inactive');  // アンケート開始のtoggle
     const [ historyButtonClass, setHistoryButtonClass ] = useState('btn__inactive');  // 履歴保存ボタンのtoggle
     const [ historySave, setHistorySave ] = useState(false);
+    const [ showTitle, setShowTitle] = useState(true);                  // アンケート画面のタイトルの表示非表示
+    const [ showVoteCount, setShowVoteCount] = useState(true);          // アンケート画面の投票数の表示非表示
 
     // todo: props地獄なのでなんとかしたい
     const { questionnaireList, questionnaireTitle, restart, reload, startObserveFlag, deleteQuestionnare, initQuestionnaire, changePropsObserveFlag, changeRestart, changeReload, historyRefresh, changeHistoryState } = props;
@@ -121,6 +123,14 @@ export default function CommentMutationObserver(props) {
         setVotes(() => votes);
     }
 
+    const changeShowVoteCount = (flag) => {
+        setShowVoteCount(flag);
+    }
+
+    const changeShowTitle = (flag) => {
+        setShowTitle(flag);
+    }
+
     const startObserve = () => {
         const commentElement = document.getElementById('chat');
 
@@ -195,6 +205,8 @@ export default function CommentMutationObserver(props) {
             <QuestionnaireResult 
                 userList={userList}
                 filter={filter}
+                showVoteCount={showVoteCount}
+                showTitle={showTitle}
                 votes={votes}
                 startObserveFlag={startObserveFlag}
                 questionnaireList={questionnaireList}
@@ -205,8 +217,8 @@ export default function CommentMutationObserver(props) {
             </QuestionnaireResult>
             {startObserveFlag ? (
                 <div class="btn__wrap">
+                    <p class="btn btn__detail">(参加方法：半角1~{questionnaireList.length}のコメントで投票に参加できます)</p>
                     <p class='btn btn__aggregate'>集計中</p>
-                    <p class='btn btn__aggregate'>現在投票数：{Object.keys(userList).length}</p>
                     <br />
                     <br />
                     <br />
@@ -222,7 +234,6 @@ export default function CommentMutationObserver(props) {
                     )
                     : (
                         <div class='btn__wrap'>
-                            <p class='btn btn__aggregate'>現在投票数：{Object.keys(userList).length}</p>
                             <p class={'btn ' + startButtonClass} onClick={() => changeObserve(true)}>アンケートスタート</p>
                             <p class={'btn ' + historyButtonClass} onClick={saveHistory}>アンケート内容を保存する</p>
                             <p
@@ -238,6 +249,30 @@ export default function CommentMutationObserver(props) {
 
             <br />
             <br />
+            <br />
+            <h2>UI制御について</h2>
+            <input
+                type='checkbox'
+                id='showTitle'
+                name='showTitle'
+                onChange={() => changeShowTitle(!showTitle)}
+                checked={showTitle ? 'checked' : ''}
+            />
+            <label class="checkbox-icon">チェックを外すとタイトルの灰色の部分を非表示にできます</label>
+
+            <br />
+
+            <input
+                type='checkbox'
+                id='showVoteCount'
+                name='showVoteCount'
+                onChange={() => changeShowVoteCount(!showVoteCount)}
+                checked={showVoteCount ? 'checked' : ''}
+            />
+            <label class="checkbox-icon">チェックを外すとオレンジの投票数を非表示にできます</label>
+
+            <br />
+
             <input
                 type='checkbox'
                 id='filter'
@@ -245,10 +280,10 @@ export default function CommentMutationObserver(props) {
                 onChange={() => changeFilter(!filter)}
                 checked={filter ? 'checked' : ''}
             />
-
-            <label class="checkbox-icon">チェックを外すと投票%が開示された状態になります</label>
+            <label class="checkbox-icon">チェックを外すと投票%が開示された状態になります(リアルタイムで数字の変化を見たい人向け)</label>
             <br />
-            <p class='questionnaire__Title'>2. 設定した内容が反映されます↓</p>
+            <br />
+            <h2>その他説明</h2>
             <p class='questionnaire__subText'>項目を設定後、「アンケートを開始する」を押すと集計が始まります。</p>
 
             <p class='questionnaire__subText'>例：）「1: 項目」が登録されてる場合、1というコメントが「項目」の票数にカウントされます。</p>

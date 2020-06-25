@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 export default function QuestionnaireResult(props) {
-    const { userList, filter, votes, startObserveFlag, questionnaireList, questionnaireTitle, deleteQuestionnare } = props;
+    const { userList, filter, showVoteCount, showTitle, votes, startObserveFlag, questionnaireList, questionnaireTitle, deleteQuestionnare } = props;
 
     const questionnaireComponent = questionnaireList.map((text, index) => {
         let percentage = 0;
@@ -30,12 +30,13 @@ export default function QuestionnaireResult(props) {
 
     return (
         <>
-        {questionnaireList.length > 1 ? (
-            <p class='questionnaire__result-title'>{questionnaireTitle}<br />(半角1~{questionnaireList.length}のコメントで投票に参加できます)</p>
-        ) : (
-            <p class='questionnaire__result-title'>{questionnaireTitle}<br />(半角数字のコメントで投票に参加できます)</p>
-        )}
+        {showTitle ? (
+            <p class='questionnaire__result-title'>{questionnaireTitle}</p>
+        ) : ''}
         <div class='questionnaire__result-window'>
+            {showVoteCount ? (
+                <p class='btn btn__voteCount'>投票数：{Object.keys(userList).length}</p>
+            ): ''}
             {questionnaireComponent}
         </div>
         </>

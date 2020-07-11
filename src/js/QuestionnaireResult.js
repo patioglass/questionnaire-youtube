@@ -12,7 +12,8 @@ export default function QuestionnaireResult(props) {
         } else {
             percentage = (Math.round(votes[index] / sumVoted * 100 * 100)) / 100; 
         }
-        return <div class='questionnaire__result-item'>
+        return <>
+                <div class='questionnaire__result-item'>
                   {!startObserveFlag ? (
                       <div 
                         class='questionnaire__result-deleteButton'
@@ -25,7 +26,8 @@ export default function QuestionnaireResult(props) {
                   ) : (
                       <p class='questionnaire__result-percentage'>{percentage.toFixed(2)} %</p>
                   )}
-              </div>
+                </div>
+                </>
     })
 
     return (
@@ -33,7 +35,7 @@ export default function QuestionnaireResult(props) {
         {showTitle ? (
             <p class='questionnaire__result-title'>{questionnaireTitle}</p>
         ) : ''}
-        <div class='questionnaire__result-window'>
+        <div class='questionnaire__result-window' id="result_window">
             {showVoteCount ? (
                 <p class='btn btn__voteCount'>投票数：{Object.keys(userList).length}</p>
             ): ''}

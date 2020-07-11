@@ -174,6 +174,12 @@ export const subWindowCss = `
         margin-right: 63%;
         font-size: 1.75em;
     }
+    .btn.btn__screenshot {
+        border-bottom: 1px solid #444;
+        color: #444;
+        width: 200px;
+        margin-top: 25px;
+    }
     input[type=checkbox] {
         -ms-transform: scale(1.7);
         -webkit-transform: scale(1.7);
@@ -182,5 +188,8 @@ export const subWindowCss = `
     }
     .checkbox-icon {
         padding: 13px;
+    }
+    #screenShot {
+        width: 20px;
     }
 `;

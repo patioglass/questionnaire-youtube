@@ -144,6 +144,7 @@ export default function Questionnaire() {
                 changeReload={(state) => changeReload(state)}
                 historyRefresh={historyRefresh}
                 changeHistoryState={(state) => changeHistoryState(state)}
+                subWindow={subWindow}
             >
             </CommentMutationObserver>
             , subRoot);

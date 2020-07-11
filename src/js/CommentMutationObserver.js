@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import QuestionnaireResult　　　　　   from './QuestionnaireResult';
+import DownloadButton                 from './DownloadButton';
 
 let commentObserver = {};
 const spStr = [
@@ -21,7 +22,7 @@ export default function CommentMutationObserver(props) {
     const [ showVoteCount, setShowVoteCount] = useState(true);          // アンケート画面の投票数の表示非表示
 
     // todo: props地獄なのでなんとかしたい
-    const { questionnaireList, questionnaireTitle, restart, reload, startObserveFlag, deleteQuestionnare, initQuestionnaire, changePropsObserveFlag, changeRestart, changeReload, historyRefresh, changeHistoryState } = props;
+    const { questionnaireList, questionnaireTitle, restart, reload, startObserveFlag, deleteQuestionnare, initQuestionnaire, changePropsObserveFlag, changeRestart, changeReload, historyRefresh, changeHistoryState, subWindow } = props;
 
     // 新規投票(newUser) or コメント欄監視開始(startObserveFlag) or アンケート項目追加/削除(questionnaireList) or ページ遷移reload
     useEffect(() => {
@@ -201,7 +202,7 @@ export default function CommentMutationObserver(props) {
         }
     }
     return (
-        <div class='questionnaire__result'>
+        <div class='questionnaire__result' id="questionnaire__result">
             <QuestionnaireResult 
                 userList={userList}
                 filter={filter}
@@ -215,80 +216,84 @@ export default function CommentMutationObserver(props) {
                 deleteQuestionnare={(index) => deleteQuestionnare(index)}
             >
             </QuestionnaireResult>
-            {startObserveFlag ? (
-                <div class="btn__wrap">
-                    <p class="btn btn__detail">(参加方法：半角1~{questionnaireList.length}のコメントで投票に参加できます)</p>
-                    <p class='btn btn__aggregate'>集計中</p>
-                    <br />
-                    <br />
-                    <br />
-                    <p class='btn btn__startQuestionnaire' onClick={finishObserve}>アンケートを終了する</p>
-                </div>
-            ) : (
-                <>
-                    {restart ? (
-                        <div class='btn__wrap'>
-                            <p class='btn btn__finishQuestionnaire' onClick={resetState}>アンケートを作り直す</p>
-                            <p class='btn btn__retryQuestionnaire' onClick={retryState}>同じアンケートをもう一度する</p>
-                        </div>
-                    )
-                    : (
-                        <div class='btn__wrap'>
-                            <p class={'btn ' + startButtonClass} onClick={() => changeObserve(true)}>アンケートスタート</p>
-                            <p class={'btn ' + historyButtonClass} onClick={saveHistory}>アンケート内容を保存する</p>
-                            <p
-                                style={{
-                                    transition: '1s',
-                                    opacity: historySave ? 1 : 0
-                                }}
-                            >保存完了しました</p>
-                        </div>
-                    )}
-                </>
-            )}
+            <div id="other_than_result_window">
+                {startObserveFlag ? (
+                    <div class="btn__wrap">
+                        <p class="btn btn__detail">(参加方法：半角1~{questionnaireList.length}のコメントで投票に参加できます)</p>
+                        <p class='btn btn__aggregate'>集計中</p>
+                        <br />
+                        <br />
+                        <br />
+                        <p class='btn btn__startQuestionnaire' onClick={finishObserve}>アンケートを終了する</p>
+                    </div>
+                ) : (
+                    <>
+                        {restart ? (
+                            <div class='btn__wrap'>
+                                <p class='btn btn__finishQuestionnaire' onClick={resetState}>アンケートを作り直す</p>
+                                <p class='btn btn__retryQuestionnaire' onClick={retryState}>同じアンケートをもう一度する</p>
+                                <br />
+                                <DownloadButton subWindow={subWindow}></DownloadButton>
+                            </div>
+                        )
+                        : (
+                            <div class='btn__wrap'>
+                                <p class={'btn ' + startButtonClass} onClick={() => changeObserve(true)}>アンケートスタート</p>
+                                <p class={'btn ' + historyButtonClass} onClick={saveHistory}>アンケート内容を保存する</p>
+                                <p
+                                    style={{
+                                        transition: '1s',
+                                        opacity: historySave ? 1 : 0
+                                    }}
+                                >保存完了しました</p>
+                            </div>
+                        )}
+                    </>
+                )}
 
-            <br />
-            <br />
-            <br />
-            <h2>UI制御について</h2>
-            <input
-                type='checkbox'
-                id='showTitle'
-                name='showTitle'
-                onChange={() => changeShowTitle(!showTitle)}
-                checked={showTitle ? 'checked' : ''}
-            />
-            <label class="checkbox-icon">チェックを外すとタイトルの灰色の部分を非表示にできます</label>
+                <br />
+                <br />
+                <br />
+                <h2>UI制御について</h2>
+                <input
+                    type='checkbox'
+                    id='showTitle'
+                    name='showTitle'
+                    onChange={() => changeShowTitle(!showTitle)}
+                    checked={showTitle ? 'checked' : ''}
+                />
+                <label class="checkbox-icon">チェックを外すとタイトルの灰色の部分を非表示にできます</label>
 
-            <br />
+                <br />
 
-            <input
-                type='checkbox'
-                id='showVoteCount'
-                name='showVoteCount'
-                onChange={() => changeShowVoteCount(!showVoteCount)}
-                checked={showVoteCount ? 'checked' : ''}
-            />
-            <label class="checkbox-icon">チェックを外すとオレンジの投票数を非表示にできます</label>
+                <input
+                    type='checkbox'
+                    id='showVoteCount'
+                    name='showVoteCount'
+                    onChange={() => changeShowVoteCount(!showVoteCount)}
+                    checked={showVoteCount ? 'checked' : ''}
+                />
+                <label class="checkbox-icon">チェックを外すとオレンジの投票数を非表示にできます</label>
 
-            <br />
+                <br />
 
-            <input
-                type='checkbox'
-                id='filter'
-                name='filter'
-                onChange={() => changeFilter(!filter)}
-                checked={filter ? 'checked' : ''}
-            />
-            <label class="checkbox-icon">チェックを外すと投票%が開示された状態になります(リアルタイムで数字の変化を見たい人向け)</label>
-            <br />
-            <br />
-            <h2>その他説明</h2>
-            <p class='questionnaire__subText'>項目を設定後、「アンケートを開始する」を押すと集計が始まります。</p>
+                <input
+                    type='checkbox'
+                    id='filter'
+                    name='filter'
+                    onChange={() => changeFilter(!filter)}
+                    checked={filter ? 'checked' : ''}
+                />
+                <label class="checkbox-icon">チェックを外すと投票%が開示された状態になります(リアルタイムで数字の変化を見たい人向け)</label>
+                <br />
+                <br />
+                <h2>その他説明</h2>
+                <p class='questionnaire__subText'>項目を設定後、「アンケートを開始する」を押すと集計が始まります。</p>
 
-            <p class='questionnaire__subText'>例：）「1: 項目」が登録されてる場合、1というコメントが「項目」の票数にカウントされます。</p>
-            <p class='questionnaire__subText'>数字のコメントを拾います。</p>
+                <p class='questionnaire__subText'>例：）「1: 項目」が登録されてる場合、1というコメントが「項目」の票数にカウントされます。</p>
+                <p class='questionnaire__subText'>数字のコメントを拾います。</p>
 
+            </div>
         </div>
     );
 }

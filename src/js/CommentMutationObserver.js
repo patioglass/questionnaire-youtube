@@ -167,6 +167,11 @@ export default function CommentMutationObserver(props) {
 
                     contents.children[0].getElementsByTagName('img')[0].onload = () => {
                         const uniqImageUrl = contents.children[0].getElementsByTagName('img')[0].getAttribute('src').split('/');
+                        // DOMミスで放送主だけグローバルimgをとってきてしまうので応急処置
+                        // youtubeでimgの生成がそもそも変わったら死ぬので要注意
+                        if ( uniqImageUrl[5] === undefined || uniqImageUrl[6] === undefined) {
+                            return;
+                        }
                         const uniqId = uniqImageUrl[3] + uniqImageUrl[4] + uniqImageUrl[5] + uniqImageUrl[6];
 
                         // useEffect発火

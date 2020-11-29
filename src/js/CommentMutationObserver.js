@@ -141,7 +141,17 @@ export default function CommentMutationObserver(props) {
 
         /*****  コメント欄observe *****/ 
         // コメント欄はiframe
-        const iframeContents = commentElement.getElementsByTagName('iframe')[0].contentWindow.document.querySelector('#item-offset #items'); 
+
+        if (commentElement.querySelector('#items')) {
+            console.log("not ifame");
+        } else {
+            console.log("ifame");
+        }
+
+        const commentContents = commentElement.querySelector('#items')
+            ? commentElement.querySelector('#items')
+            : commentElement.getElementsByTagName('iframe')[0].contentWindow.document.querySelector('#item-offset #items');
+
         // コメント欄監視
         commentObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
@@ -165,23 +175,23 @@ export default function CommentMutationObserver(props) {
                         return;
                     }
 
-                    contents.children[0].getElementsByTagName('img')[0].onload = () => {
-                        const uniqImageUrl = contents.children[0].getElementsByTagName('img')[0].getAttribute('src').split('/');
-                        // DOMミスで放送主だけグローバルimgをとってきてしまうので応急処置
-                        // youtubeでimgの生成がそもそも変わったら死ぬので要注意
-                        if ( uniqImageUrl[5] === undefined || uniqImageUrl[6] === undefined) {
-                            return;
-                        }
-                        const uniqId = uniqImageUrl[3] + uniqImageUrl[4] + uniqImageUrl[5] + uniqImageUrl[6];
+                    const iconImage = contents.children[0].getElementsByTagName('img')[0];
+                    if (iconImage.parentNode.getAttribute('id') === 'author-photo') {
+                        iconImage.onload = () => {
+                            const uniqImageUrl = iconImage.getAttribute('src').split('/');
 
-                        // useEffect発火
-                        setNewUser(() => ({[uniqId]: targetMessage}));
+                            const uniqId = uniqImageUrl[3] + uniqImageUrl[4];
+
+                            // useEffect発火
+                            setNewUser(() => ({[uniqId]: targetMessage}));
+                            iconImage.onload = null;
+                        }
                     }
                 })
             });
         });
      
-        commentObserver.observe(iframeContents, {
+        commentObserver.observe(commentContents, {
             childList:  true
         })
         /*****  コメント欄observe *****/ 

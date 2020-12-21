@@ -68,53 +68,12 @@ export default function Questionnaire() {
     const changeHistoryState = (state) => {
         setHistoryRefresh(state);
     }
-    
-    const isLive = () => {
-        const liveContents = document.getElementById('date').innerText.match(/ライブ配信開始|開始予定/);
-        if (!liveContents) {
-            return false;
-        }
-        return true;
-    }
 
     const subWindowClose = () => {
         changeQuestionnaire(false);
         setReload(true);
         subWindow = null;
         subRoot = null;
-    }
-
-    const detectedCommentFrame = () => {
-        const initObserve = setInterval(() => {
-            setLoadCommentFrame(true);
-            if (document.getElementsByTagName('ytd-video-owner-renderer')[0]) {
-                
-                setLiveContents(isLive());
-                /*****  ページ全体observe *****/
-                pageObserver = new MutationObserver((mutations) => {
-                    mutations.forEach((mutation) => {
-                        if (mutation.type === 'childList') {
-                            if (mutation.addedNodes.length === 1 && currentUrl != window.location.href) {;
-                                currentUrl = window.location.href;
-                                // アンケート実施中にページ遷移したら強制リフレッシュ
-                                setLoadCommentFrame(false);
-                                changeLiveContents(isLive());
-                                changeQuestionnaire(false);
-                                setReload(true);
-                            }
-                        }
-                    })
-                });
-
-                // ページ移動検知用observe
-                pageObserver.observe(document.getElementsByTagName('ytd-video-owner-renderer')[0], {
-                    childList: true,
-                    subtree: true
-                })
-                /*****  ページ全体observe *****/
-                clearInterval(initObserve);
-            }
-        }, 500);
     }
     
     if (liveContents && isQuestionnaire) {
@@ -266,13 +225,7 @@ export default function Questionnaire() {
         </div>
         ) : (
             <div>
-                <p class='btn btn__useQuestionnaire' onClick={() => detectedCommentFrame()}>アンケート機能を使う</p>
-                {loadCommentFrame ? (
-                    <>
-                    <p>読み込み中...</p>
-                    <p>※生配信中のものではない、または読み込みが終わらない場合はページリロードして再度お試しください。</p>
-                    </>
-                ): ''}
+                <p class='btn btn__useQuestionnaire' onClick={() => setLiveContents(true)}>アンケート機能を使う</p>
             </div>
         )}
         </>

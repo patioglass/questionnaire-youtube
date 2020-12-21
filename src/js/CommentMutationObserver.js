@@ -135,7 +135,7 @@ export default function CommentMutationObserver(props) {
     const startObserve = () => {
         const commentElement = document.getElementById('chat');
 
-        if (commentElement.length < 1) {
+        if (!commentElement || commentElement.length < 1) {
             return false;
         }
 

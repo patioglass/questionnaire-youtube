@@ -5,7 +5,6 @@ import CommentMutationObserver from './CommentMutationObserver';
 import InputForm               from './InputForm';
 import * as subWindowCss            from '../css/subWindow';
 
-let pageObserver = {};
 let subWindow = null;
 let subRoot = null;
 
@@ -17,11 +16,11 @@ export default function Questionnaire() {
     const [ liveContents, setLiveContents ] = useState(false);           // ライブ配信判定
     const [ isQuestionnaire, setQuestionnaire ] = useState(false);      // アンケート開始フラグ
     const [ reload, setReload ] = useState(false);
-    const [ loadCommentFrame, setLoadCommentFrame ] = useState(false);
     const [ historyRefresh, setHistoryRefresh ] = useState(false);
-
-    // ページ遷移判定用
-    let currentUrl = '';
+    const [ latestCssData, setLatestCssData ] = useState('');           // 一番最後に読み込んだcss
+    const [ latestCssTitle, setLatestCssTitle ] = useState('');         // 一番最後に読み込んだcssのファイル名
+    const [ showTitle, setShowTitle] = useState(true);                  // アンケート画面のタイトルの表示非表示
+    const [ showVoteCount, setShowVoteCount] = useState(true);          // アンケート画面の投票数の表示非表示
 
     // localStorageが使えるかどうか
     const canLocalStorage = window.localStorage;
@@ -53,10 +52,6 @@ export default function Questionnaire() {
         setRestart(flag);
     }
 
-    const changeLiveContents = (state) => {
-        setLiveContents(state);
-    }
-
     const changeQuestionnaire = (state) => {
         setQuestionnaire(state);
     }
@@ -69,13 +64,42 @@ export default function Questionnaire() {
         setHistoryRefresh(state);
     }
 
+    const changeShowTitleFlag = (state) => {
+        chrome.storage.local.set({'showTitleFlag::questionnare-youtube': state ? 'true' : 'false'}, ()=>{});
+        setShowTitle(state);
+    }
+
+    const changeShowVoteCountFlag = (state) => {
+        chrome.storage.local.set({'showVoteCountFlag::questionnare-youtube': state ? 'true' : 'false'}, ()=>{});
+        setShowVoteCount(state);
+    }
+
     const subWindowClose = () => {
         changeQuestionnaire(false);
         setReload(true);
         subWindow = null;
         subRoot = null;
     }
-    
+
+    // 前回読み込んだcssの生データを取得
+    chrome.storage.local.get("cssData::questionnare-youtube", (value) => {
+        setLatestCssData(value['cssData::questionnare-youtube']);
+    });
+    chrome.storage.local.get("cssTitle::questionnare-youtube", (value) => {
+        setLatestCssTitle(value['cssTitle::questionnare-youtube']);
+    });
+
+    // 前回のチェックボックスを復元
+    chrome.storage.local.get("showTitleFlag::questionnare-youtube", (value) => {
+        const flag = (value['showTitleFlag::questionnare-youtube'] === 'true' || value['showTitleFlag::questionnare-youtube'] === '');
+        setShowTitle(flag);
+    });
+    chrome.storage.local.get("showVoteCountFlag::questionnare-youtube", (value) => {
+        const flag = (value['showVoteCountFlag::questionnare-youtube'] === 'true' || value['showVoteCountFlag::questionnare-youtube'] === '')
+        setShowVoteCount(flag);
+    });
+
+
     if (liveContents && isQuestionnaire) {
         if (subRoot === null) {
             subWindow = window.open('about:blank', null, 'resizable=no,scrollbars=yes,status=no');
@@ -86,12 +110,21 @@ export default function Questionnaire() {
             const subStyle = subWindow.document.createElement('style');
             subStyle.textContent = subWindowCss.subWindowCss;
             subHead.appendChild(subStyle);
+
+            if (latestCssData) {
+                const addSubStyle = subWindow.document.createElement('style');
+                addSubStyle.textContent = latestCssData;
+                subHead.appendChild(addSubStyle);
+            }
+
             subWindow.addEventListener('unload', subWindowClose);
         }
         ReactDOM.render(
             <CommentMutationObserver 
                 questionnaireList={questionnaireList}
                 questionnaireTitle={questionnaireTitle}
+                showTitle={showTitle}
+                showVoteCount={showVoteCount}
                 restart={restart}
                 reload={reload}
                 liveContents={liveContents}
@@ -103,6 +136,8 @@ export default function Questionnaire() {
                 changeReload={(state) => changeReload(state)}
                 historyRefresh={historyRefresh}
                 changeHistoryState={(state) => changeHistoryState(state)}
+                changeShowTitleFlag={(state) => changeShowTitleFlag(state)}
+                changeShowVoteCountFlag={(state) => changeShowVoteCountFlag(state)}
                 subWindow={subWindow}
             >
             </CommentMutationObserver>
@@ -113,10 +148,12 @@ export default function Questionnaire() {
     const changeCssFile = (e) => {
         const reader = new FileReader();
         reader.readAsText(e.target.files[0]);
-        console.log(e.target.files[0].webkitRelativePath);
 
-        reader.addEventListener( 'load', function() {
+        reader.addEventListener( 'load', {cssTitle: e.target.files[0].name, handleEvent: function() {
             const targetCss = reader.result;
+            // 最新の読み込んだcssをchrome.storageに保存
+            chrome.storage.local.set({'cssData::questionnare-youtube': targetCss}, ()=>{});
+            chrome.storage.local.set({'cssTitle::questionnare-youtube': this.cssTitle}, ()=>{});
 
             // すでに読み込んでいた場合、前のものを削除
             if (subWindow.document.styleSheets.length > 1) {
@@ -126,7 +163,7 @@ export default function Questionnaire() {
             const subStyle = subWindow.document.createElement('style');
             subStyle.textContent = targetCss;
             subHead.appendChild(subStyle);
-        })
+        }})
     }
 
     // 履歴にあるアンケートを読み込む
@@ -214,6 +251,13 @@ export default function Questionnaire() {
                 <br />
                 <h3>外部cssを読み込む</h3>
                 <br />
+                {(latestCssData || latestCssTitle) ? (
+                    <>
+                    <p>※前回読み込んだcssが適用されています（<strong>現在のファイル：{latestCssTitle}</strong>）</p>
+                    <p>更新したい場合は再度ファイルを読み込ませてください（解除したい場合は公式の提供テンプレートの「deault.css」を適用してください）</p>
+                    <br />
+                    </>
+                ) : ''}
                 <input type="file" id="cssFile" onChange={(e) => changeCssFile(e)} />
                 <br />
                 <br />

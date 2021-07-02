@@ -154,6 +154,7 @@ export default function Questionnaire() {
     const changeCssFile = (e) => {
         const reader = new FileReader();
         reader.readAsText(e.target.files[0]);
+        console.log(e.target.files[0].webkitRelativePath);
 
         reader.addEventListener( 'load', function() {
             const targetCss = reader.result;

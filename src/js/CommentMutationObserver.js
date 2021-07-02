@@ -52,7 +52,7 @@ export default function CommentMutationObserver(props) {
             // 新規投票登録
             Object.keys(newUser).forEach((key) => {
                 if (!userList[key]) {
-                console.log('登録：'+ newUser[key]);
+                    console.log('登録：'+ newUser[key]);
 
                     changeVotes(newUser[key], 1);
                     setUserList(list => ({...list, [key]: newUser[key]}));

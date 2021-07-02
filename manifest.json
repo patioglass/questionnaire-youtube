@@ -15,5 +15,8 @@
       "js": ["index.min.js"],
       "css": ["style.css"]
     }
+  ],
+  "permissions": [
+    "storage"
   ]
 }

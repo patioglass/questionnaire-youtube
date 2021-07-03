@@ -18,11 +18,27 @@ export default function CommentMutationObserver(props) {
     const [ startButtonClass, setStartButtonClass ] = useState('btn__inactive');  // アンケート開始のtoggle
     const [ historyButtonClass, setHistoryButtonClass ] = useState('btn__inactive');  // 履歴保存ボタンのtoggle
     const [ historySave, setHistorySave ] = useState(false);
-    const [ showTitle, setShowTitle] = useState(true);                  // アンケート画面のタイトルの表示非表示
-    const [ showVoteCount, setShowVoteCount] = useState(true);          // アンケート画面の投票数の表示非表示
 
     // todo: props地獄なのでなんとかしたい
-    const { questionnaireList, questionnaireTitle, restart, reload, startObserveFlag, deleteQuestionnare, initQuestionnaire, changePropsObserveFlag, changeRestart, changeReload, historyRefresh, changeHistoryState, subWindow } = props;
+    const {
+        questionnaireList,
+        questionnaireTitle,
+        showTitle,
+        showVoteCount,
+        restart,
+        reload,
+        startObserveFlag,
+        deleteQuestionnare,
+        initQuestionnaire,
+        changePropsObserveFlag,
+        changeRestart,
+        changeReload,
+        historyRefresh,
+        changeHistoryState,
+        changeShowTitleFlag,
+        changeShowVoteCountFlag,
+        subWindow
+    } = props;
 
     // 新規投票(newUser) or コメント欄監視開始(startObserveFlag) or アンケート項目追加/削除(questionnaireList) or ページ遷移reload
     useEffect(() => {
@@ -52,8 +68,6 @@ export default function CommentMutationObserver(props) {
             // 新規投票登録
             Object.keys(newUser).forEach((key) => {
                 if (!userList[key]) {
-                console.log('登録：'+ newUser[key]);
-
                     changeVotes(newUser[key], 1);
                     setUserList(list => ({...list, [key]: newUser[key]}));
                 }
@@ -125,11 +139,11 @@ export default function CommentMutationObserver(props) {
     }
 
     const changeShowVoteCount = (flag) => {
-        setShowVoteCount(flag);
+        changeShowVoteCountFlag(flag);
     }
 
     const changeShowTitle = (flag) => {
-        setShowTitle(flag);
+        changeShowTitleFlag(flag);
     }
 
     const startObserve = () => {

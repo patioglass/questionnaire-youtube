@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "2.5.0",
+  "version": "2.6.0",
   "name": "つべアンケ",
   "description": "Youtube画面内でアンケートができる拡張",
   "icons": {
@@ -15,5 +15,8 @@
       "js": ["index.min.js"],
       "css": ["style.css"]
     }
+  ],
+  "permissions": [
+    "storage"
   ]
 }

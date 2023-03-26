@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import QuestionnaireResult　　　　　   from './QuestionnaireResult';
+import QuestionnaireResult            from './QuestionnaireResult';
 import DownloadButton                 from './DownloadButton';
 
 let commentObserver = {};
@@ -215,16 +215,11 @@ export default function CommentMutationObserver(props) {
 
     const saveHistory = () => {
         if (questionnaireTitle) {
-            let currentNum = 0;
-
-            for (let key in localStorage) {
-                if (key.match(/patio/)) {
-                    currentNum += 1;
-                }
-            }
-
+            // unixtimeで番号を振る
+            const currentDate = new Date();
+            const currentUnixTime = currentDate.getTime();
             // タイトル,アンケート項目1,アンケート項目2...となるように整形する
-            localStorage.setItem('questionnaire::patio' + currentNum, questionnaireTitle + "," + questionnaireList.join());
+            localStorage.setItem('questionnaire::patio' + currentUnixTime, questionnaireTitle + "," + questionnaireList.join());
             changeHistoryState(!historyRefresh);
             setHistorySave(true);
             setTimeout(setHistorySave, 3000, false);

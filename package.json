@@ -1,6 +1,6 @@
 {
   "name": "questionnaire-youtube",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "Youtube画面内でアンケートができる拡張",
   "main": "webpack.config.js",
   "scripts": {
@@ -30,7 +30,7 @@
     "sass-loader": "^11.1.1",
     "style-loader": "^1.2.1",
     "url-loader": "^2.3.0",
-    "webpack": "^5.42.0",
+    "webpack": "^5.76.3",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2"
   }

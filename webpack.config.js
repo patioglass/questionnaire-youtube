@@ -56,5 +56,9 @@ module.exports = [
         optimization: {
             minimizer: [new TerserJSPlugin({}),new OptimizeCSSAssetsPlugin({})],
         },
-    }
+        performance: {
+            maxEntrypointSize: 500000,
+            maxAssetSize: 500000,
+        }
+    },
 ];

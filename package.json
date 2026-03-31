@@ -14,7 +14,7 @@
     "@babel/preset-react": "^7.10.4",
     "babel-loader": "^8.1.0",
     "babel-plugin-react-html-attrs": "^2.1.0",
-    "copy-webpack-plugin": "^9.0.1",
+    "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.2",
     "domready": "^1.0.8",
     "file-loader": "^4.3.0",
